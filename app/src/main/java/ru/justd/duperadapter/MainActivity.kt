@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.ProgressBar
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         recycler.adapter = duperAdapter
 
         duperAdapter
-                .addViewType<String, TextView>(String::class.java,1)
+                .addViewType<String, TextView>(String::class.java)
                 .addViewCreator({ vg -> TextView(vg.context) })
                 .addViewBinder({ viewHolder, item -> viewHolder.view.text = item })
                 .commit()
@@ -58,6 +59,13 @@ class MainActivity : AppCompatActivity() {
                 .addViewBinder({ viewHolder, item -> viewHolder.view.text = item.toString() })
                 .commit()
 
+        duperAdapter
+                .addViewType<Progress, ProgressBar>(Progress::class.java)
+                .addViewCreator({ vg ->
+                    ProgressBar(vg.context, null, android.R.attr.progressBarStyleSmall)
+                })
+                .commit()
+
         duperAdapter.add("one")
         duperAdapter.add("two")
         duperAdapter.add("three")
@@ -66,6 +74,10 @@ class MainActivity : AppCompatActivity() {
         duperAdapter.add(2)
         duperAdapter.add(3)
 
+        duperAdapter.add(Progress())
+
     }
+
+    class Progress{}
 
 }

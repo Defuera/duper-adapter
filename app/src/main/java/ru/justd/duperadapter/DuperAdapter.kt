@@ -21,7 +21,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 //            throw IllegalArgumentException("view holder type is not the same as view type")
 //        }
 
-        factory.viewBinder(viewHolder, getItem(position))
+        factory.viewBinder?.invoke(viewHolder, getItem(position))
     }
 
 
@@ -53,9 +53,9 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     abstract fun getItem(position: Int): Any
 
-    inner class Factory<in T, V : View> constructor(
+    inner class Factory<in T, V : View>(
             val viewCreator: (ViewGroup) -> V,
-            val viewBinder: (DuperViewHolder<V>, T) -> Unit
+            val viewBinder: ((DuperViewHolder<V>, T) -> Unit)?
     ) {
 
         fun createViewHolder(viewGroup: ViewGroup): DuperViewHolder<V> {
@@ -74,7 +74,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
     inner class FactoryBuilder<T, V : View>(val clazz: Class<T>, val type: Int = 0) {
 
         private lateinit var viewCreator: (ViewGroup) -> V
-        private lateinit var viewBinder: (DuperViewHolder<V>, T) -> Unit
+        private var viewBinder: ((DuperViewHolder<V>, T) -> Unit)? = null
 
         fun addViewCreator(viewCreator: (ViewGroup) -> V): FactoryBuilder<T, V> {
             this.viewCreator = viewCreator
