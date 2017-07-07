@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +35,12 @@ class MainActivity : AppCompatActivity() {
                 .addViewType<String, TextView>(String::class.java)
                 .addViewCreator({ vg -> TextView(vg.context) })
                 .addViewBinder({ viewHolder, item -> viewHolder.view.text = item })
+                .addClickListener(object : ItemClickListener<String, TextView> {
+                    override fun onItemClicked(view: TextView, item: String) {
+                        Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
                 .commit()
 
         duperAdapter
@@ -50,13 +57,28 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
         duperAdapter
-                .addViewType<Integer, TextView>(Integer::class.java)
-                .addViewCreator({ vg ->
-                    val textView = TextView(vg.context)
-                    textView.setTextColor(Color.BLUE)
-                    textView
-                })
-                .addViewBinder({ viewHolder, item -> viewHolder.view.text = item.toString() })
+                .addViewType<Integer, CustomWidget>(Integer::class.java)
+                .addViewCreator { parent -> CustomWidget(parent.context) }
+                .addViewBinder { viewHolder, item ->
+                    viewHolder.view.bind(item)
+                }
+                .addClickListener(
+                        object : ItemClickListener<Integer, CustomWidget> {
+                            override fun onItemClicked(view: CustomWidget, item: Integer) {
+                                Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                )
+                .addClickListener(
+                        R.id.image,
+                        object : ItemClickListener<Integer, CustomWidget> {
+                            override fun onItemClicked(view: CustomWidget, item: Integer) {
+                                Toast.makeText(view.context, "image view of item $item clicked", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                )
                 .commit()
 
         duperAdapter
@@ -70,14 +92,12 @@ class MainActivity : AppCompatActivity() {
         duperAdapter.add("two")
         duperAdapter.add("three")
 
-        duperAdapter.add(1)
-        duperAdapter.add(2)
-        duperAdapter.add(3)
+        for (i in 1..30) { duperAdapter.add(i) }
 
         duperAdapter.add(Progress())
 
     }
 
-    class Progress{}
+    class Progress
 
 }
