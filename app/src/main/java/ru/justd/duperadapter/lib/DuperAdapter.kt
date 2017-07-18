@@ -1,4 +1,4 @@
-package ru.justd.duperadapter
+package ru.justd.duperadapter.lib
 
 import android.support.annotation.IdRes
 import android.support.v7.widget.RecyclerView
@@ -119,7 +119,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
         }
 
 
-        fun commit() {
+        fun commit() { //todo get rid of commit, you know how to do that
 
             factories.put(
                     createItemViewType(clazz, type),

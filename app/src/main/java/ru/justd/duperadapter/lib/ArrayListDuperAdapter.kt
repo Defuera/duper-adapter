@@ -1,7 +1,6 @@
-package ru.justd.duperadapter
+package ru.justd.duperadapter.lib
 
 open class ArrayListDuperAdapter : DuperAdapter() {
-
 
     val items = ArrayList<Any>()
 
