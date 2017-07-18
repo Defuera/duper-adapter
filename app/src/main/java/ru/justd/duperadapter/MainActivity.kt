@@ -1,11 +1,13 @@
 package ru.justd.duperadapter
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup.LayoutParams
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter
+import ru.justd.duperadapter.lib.ItemClickListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +27,13 @@ class MainActivity : AppCompatActivity() {
                     widget
                 }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
+                .addClickListener(
+                        object : ItemClickListener<Sample, SampleWidget> {
+                            override fun onItemClicked(view: SampleWidget, item: Sample) {
+                                startActivity(Intent(this@MainActivity, ArrayListAdapterShowcaseActivity::class.java))
+                            }
+                        }
+                )
                 .commit()
 
         recycler.adapter = adapter

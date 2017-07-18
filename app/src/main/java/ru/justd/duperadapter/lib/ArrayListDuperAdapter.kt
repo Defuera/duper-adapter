@@ -14,5 +14,4 @@ open class ArrayListDuperAdapter : DuperAdapter() {
         items.add(item)
     }
 
-
 }
