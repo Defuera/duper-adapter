@@ -107,13 +107,27 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
             return this
         }
 
+        fun addClickListener(itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
+            return addClickListener(object : ItemClickListener<T, V> {
+                override fun onItemClicked(view: V, item: T) {
+                    itemClickListener.invoke(view, item)
+                }
+            })
+        }
+
+        fun addClickListener(@IdRes resId: Int = -1, itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
+            return addClickListener(resId, object : ItemClickListener<T, V> {
+                override fun onItemClicked(view: V, item: T) {
+                    itemClickListener.invoke(view, item)
+                }
+            })
+        }
+
         fun addClickListener(itemClickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
             return addClickListener(clickListener = itemClickListener)
         }
 
-        fun addClickListener(
-                @IdRes resId: Int = -1,
-                clickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
+        fun addClickListener(@IdRes resId: Int = -1, clickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
             clickListeners.put(resId, clickListener)
             return this
         }
@@ -129,9 +143,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     }
 
-
     /**
-     *
      * @return Int representation of itemViewType, which is directly used by RecyclerView.Adapter
      */
     private fun <T> createItemViewType(clazz: Class<T>, typeIndex: Int): Int {

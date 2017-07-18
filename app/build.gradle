@@ -24,11 +24,11 @@ def supportVersion = '26.0.0-beta2'
 dependencies {
 
     //kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.3"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.3"
 
     //support
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:cardview-v7:$supportVersion"
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:cardview-v7:$supportVersion"
 
 }

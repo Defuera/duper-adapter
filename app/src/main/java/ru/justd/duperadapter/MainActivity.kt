@@ -2,23 +2,29 @@ package ru.justd.duperadapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup.LayoutParams
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter
-import ru.justd.duperadapter.lib.ItemClickListener
 
 class MainActivity : AppCompatActivity() {
+
+    val adapter = ArrayListDuperAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val recycler = findViewById<RecyclerView>(R.id.recycler)
-
         recycler.layoutManager = LinearLayoutManager(this)
-        val adapter = ArrayListDuperAdapter()
+        recycler.adapter = adapter
+
+        val itemDecoration = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)
+        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.item_decoration_padding))
+        recycler.addItemDecoration(itemDecoration)
 
         adapter.addViewType<Sample, SampleWidget>(Sample::class.java)
                 .addViewCreator { parent ->
@@ -27,22 +33,19 @@ class MainActivity : AppCompatActivity() {
                     widget
                 }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
-                .addClickListener(
-                        object : ItemClickListener<Sample, SampleWidget> {
-                            override fun onItemClicked(view: SampleWidget, item: Sample) {
-                                startActivity(Intent(this@MainActivity, ArrayListAdapterShowcaseActivity::class.java))
-                            }
-                        }
-                )
+                .addClickListener { view, item -> startActivity(Intent(this@MainActivity, ArrayListAdapterShowcaseActivity::class.java)) }
                 .commit()
 
-        recycler.adapter = adapter
-
-        adapter.add(
-                Sample("ArrayListAdapter",
-                        "Simplest adapter showcase. Adapter creation in 3 lines"
+        adapter.addAll(listOf(
+                Sample(
+                        "ArrayListAdapter",
+                        "Simple adapter showcase. Create adapter with custom view and set clickListeners to the root view and to it's child by specifying viewId"
+                ),
+                Sample(
+                        "Custom viewHolder",
+                        "Showcase creating a custom view holder."
                 )
-        )
+        ))
 
     }
 
