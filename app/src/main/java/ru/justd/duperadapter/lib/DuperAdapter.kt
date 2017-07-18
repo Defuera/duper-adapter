@@ -7,6 +7,8 @@ import android.view.ViewGroup
 
 abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<View>>() {
 
+    val CONTAINER_ID = -1
+
     private val duperCodesList = ArrayList<String>()
 
     val factories = HashMap<Int, Factory<*, *>>()
@@ -19,15 +21,16 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
             resId, clickListener ->
             val view = viewHolder.view
 
-            if (resId == CONTAINER_ID) {
-                view
-            } else {
-                view.findViewById<View>(resId)
-            }.setOnClickListener {
-                v ->
-                clickListener.onItemClicked(view, getItem(viewHolder.adapterPosition))
-            }
+            val target = if (resId == CONTAINER_ID) view else view.findViewById<View>(resId)
+            target.setOnClickListener { _ -> clickListener.onItemClicked(view, getItem(viewHolder.adapterPosition)) }
+        }
 
+        factory.viewHolderClickListeners.forEach {
+            resId, clickListener ->
+            val view = viewHolder.view
+
+            val target = if (resId == CONTAINER_ID) view else view.findViewById<View>(resId)
+            target.setOnClickListener { _ -> clickListener.onItemClicked(viewHolder, getItem(viewHolder.adapterPosition)) }
         }
 
         return viewHolder
@@ -36,7 +39,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
     override fun onBindViewHolder(viewHolder: DuperViewHolder<View>, position: Int) {
         val factory = getFactory<Any, View>(getItemViewType(position))
 
-//        if (viewHolder.view.javaClass != factory.getViewClass()) { //todo
+//        if (viewHolder.view.javaClass != factory.getViewClass()) { //todo do I want explicit exception here?
 //            throw IllegalArgumentException("view holder type is not the same as view type")
 //        }
 
@@ -72,10 +75,11 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     abstract fun getItem(position: Int): Any
 
-    inner class Factory<T, V : View>(
+    inner class Factory<T, V : View> constructor(
             val viewCreator: (ViewGroup) -> V,
             val viewBinder: ((DuperViewHolder<V>, T) -> Unit)?,
-            val clickListeners: HashMap<Int, ItemClickListener<T, V>>
+            val clickListeners: HashMap<Int, ItemClickListener<T, V>>,
+            val viewHolderClickListeners: HashMap<Int, ItemViewHolderClickListener<T, V>>
     ) {
 
         fun createViewHolder(viewGroup: ViewGroup): DuperViewHolder<V> {
@@ -100,6 +104,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
         private lateinit var viewCreator: (ViewGroup) -> V
         private var viewBinder: ((DuperViewHolder<V>, T) -> Unit)? = null
         private val clickListeners = HashMap<Int, ItemClickListener<T, V>>()
+        private val viewHolderClickListeners = HashMap<Int, ItemViewHolderClickListener<T, V>>()
 
         fun addViewCreator(viewCreator: (ViewGroup) -> V): FactoryBuilder<T, V> { //todo is there's a way to assure order?
             this.viewCreator = viewCreator
@@ -128,12 +133,16 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
             })
         }
 
-        fun addViewHolderClickListener(@IdRes resId: Int = -1, itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
-            return addClickListener(resId, object : ItemClickListener<T, V> {
-                override fun onItemClicked(view: V, item: T) {
-                    itemClickListener.invoke(view, item)
-                }
-            })
+        fun addViewHolderClickListener(@IdRes resId: Int = -1, itemViewHolderClickListener: (viewHolder: DuperViewHolder<V>, item: T) -> Unit): FactoryBuilder<T, V> {
+            viewHolderClickListeners.put(
+                    resId,
+                    object : ItemViewHolderClickListener<T, V> {
+                        override fun <VH : DuperViewHolder<V>> onItemClicked(viewHolder: VH, item: T) {
+                            itemViewHolderClickListener.invoke(viewHolder, item)
+                        }
+                    })
+            return this
+
         }
 
 //        fun addClickListener(itemClickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
@@ -150,7 +159,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
             factories.put(
                     createItemViewType(clazz, type),
-                    Factory(viewCreator, viewBinder, clickListeners)
+                    Factory(viewCreator, viewBinder, clickListeners, viewHolderClickListeners)
             )
         }
 
@@ -177,14 +186,13 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
 }
 
-val CONTAINER_ID = -1
 
 interface ItemClickListener<in T, in V : View> {
 
     fun onItemClicked(view: V, item: T)
 }
 
-//interface ItemViewHolderClickListener<in T, in V : View> {
-//
-//    fun onItemClicked(view: V, item: T)
-//}
+interface ItemViewHolderClickListener<in T, in V : View> {
+
+    fun <VH : DuperAdapter.DuperViewHolder<V>> onItemClicked(viewHolder: VH, item: T)
+}

@@ -22,11 +22,11 @@ class MainActivity : RecyclerActivity() {
                     widget
                 }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
-                .addClickListener { view, item ->
-                    when (item.title){ //todo use viewHolder.adapterPosition here
-                        "ArrayListAdapter" -> startActivity(Intent(this, SimplaAdapterShowcase::class.java))
-                        "Custom viewHolder" -> Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show()
-                        "JavaSample" -> startActivity(Intent(this, JavaSampleActivity::class.java))
+                .addViewHolderClickListener { viewHoler, _ ->
+                    when (viewHoler.adapterPosition) {
+                        0 -> startActivity(Intent(this, SimplaAdapterShowcase::class.java))
+                        1 -> Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show()
+                        2 -> startActivity(Intent(this, JavaSampleActivity::class.java))
                     }
 
                 }
