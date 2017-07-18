@@ -2,29 +2,18 @@ package ru.justd.duperadapter
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup.LayoutParams
+import android.widget.Toast
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : RecyclerActivity() {
 
     val adapter = ArrayListDuperAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val recycler = findViewById<RecyclerView>(R.id.recycler)
-        recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
-
-        val itemDecoration = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.item_decoration_padding))
-        recycler.addItemDecoration(itemDecoration)
 
         adapter.addViewType<Sample, SampleWidget>(Sample::class.java)
                 .addViewCreator { parent ->
@@ -33,7 +22,14 @@ class MainActivity : AppCompatActivity() {
                     widget
                 }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
-                .addClickListener { view, item -> startActivity(Intent(this@MainActivity, ArrayListAdapterShowcaseActivity::class.java)) }
+                .addClickListener { view, item ->
+                    when (item.title){ //todo use viewHolder.adapterPosition here
+                        "ArrayListAdapter" -> startActivity(Intent(this, SimplaAdapterShowcase::class.java))
+                        "Custom viewHolder" -> Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show()
+                        "JavaSample" -> startActivity(Intent(this, JavaSampleActivity::class.java))
+                    }
+
+                }
                 .commit()
 
         adapter.addAll(listOf(
@@ -44,6 +40,10 @@ class MainActivity : AppCompatActivity() {
                 Sample(
                         "Custom viewHolder",
                         "Showcase creating a custom view holder."
+                ),
+                Sample(
+                        "JavaSample",
+                        "Use adapter from Java"
                 )
         ))
 

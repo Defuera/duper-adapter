@@ -17,9 +17,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ArrayListAdapterShowcaseActivity"
+        <activity android:name=".SimplaAdapterShowcase"
             android:label="ArrayListAdapter"
             android:parentActivityName=".MainActivity"/>
+
+        <activity android:name=".JavaSampleActivity"
+                  android:label="Java sample"
+                  android:parentActivityName=".MainActivity"/>
 
     </application>
 

@@ -87,6 +87,10 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     class FactoryNotCreatedException(message: String) : RuntimeException(message)
 
+    fun <T : Any, V : View> addViewType(itemType: Class<T>): FactoryBuilder<T, V> { //todo this method is only for java, should we annotate it somehow?
+        return FactoryBuilder(itemType, 0)
+    }
+
     fun <T : Any, V : View> addViewType(itemType: Class<T>, viewType: Int = 0): FactoryBuilder<T, V> {
         return FactoryBuilder(itemType, viewType)
     }
@@ -97,7 +101,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
         private var viewBinder: ((DuperViewHolder<V>, T) -> Unit)? = null
         private val clickListeners = HashMap<Int, ItemClickListener<T, V>>()
 
-        fun addViewCreator(viewCreator: (ViewGroup) -> V): FactoryBuilder<T, V> {
+        fun addViewCreator(viewCreator: (ViewGroup) -> V): FactoryBuilder<T, V> { //todo is there's a way to assure order?
             this.viewCreator = viewCreator
             return this
         }
@@ -107,14 +111,15 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
             return this
         }
 
-        fun addClickListener(itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
-            return addClickListener(object : ItemClickListener<T, V> {
-                override fun onItemClicked(view: V, item: T) {
-                    itemClickListener.invoke(view, item)
-                }
-            })
-        }
+//        fun addClickListener(itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
+//            return addClickListener(object : ItemClickListener<T, V> {
+//                override fun onItemClicked(view: V, item: T) {
+//                    itemClickListener.invoke(view, item)
+//                }
+//            })
+//        }
 
+        //todo this method will not be visible from java, annotate it somehow?
         fun addClickListener(@IdRes resId: Int = -1, itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
             return addClickListener(resId, object : ItemClickListener<T, V> {
                 override fun onItemClicked(view: V, item: T) {
@@ -123,9 +128,17 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
             })
         }
 
-        fun addClickListener(itemClickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
-            return addClickListener(clickListener = itemClickListener)
+        fun addViewHolderClickListener(@IdRes resId: Int = -1, itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
+            return addClickListener(resId, object : ItemClickListener<T, V> {
+                override fun onItemClicked(view: V, item: T) {
+                    itemClickListener.invoke(view, item)
+                }
+            })
         }
+
+//        fun addClickListener(itemClickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
+//            return addClickListener(clickListener = itemClickListener)
+//        }
 
         fun addClickListener(@IdRes resId: Int = -1, clickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
             clickListeners.put(resId, clickListener)
@@ -170,3 +183,8 @@ interface ItemClickListener<in T, in V : View> {
 
     fun onItemClicked(view: V, item: T)
 }
+
+//interface ItemViewHolderClickListener<in T, in V : View> {
+//
+//    fun onItemClicked(view: V, item: T)
+//}

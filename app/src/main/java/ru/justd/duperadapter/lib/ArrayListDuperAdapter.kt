@@ -14,8 +14,8 @@ open class ArrayListDuperAdapter : DuperAdapter() {
         items.add(item)
     }
 
-    fun addAll(item: List<Any>) {
-        items.addAll(item)
+    fun addAll(items: List<Any>) {
+        this.items.addAll(items)
     }
 
 }

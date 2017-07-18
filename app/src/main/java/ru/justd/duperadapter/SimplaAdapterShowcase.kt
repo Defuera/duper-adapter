@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter
 
-class ArrayListAdapterShowcaseActivity : AppCompatActivity() {
+class SimplaAdapterShowcase : AppCompatActivity() {
 
     val duperAdapter = ArrayListDuperAdapter()
 
