@@ -1,15 +1,16 @@
-package ru.justd.duperadapter
+package ru.justd.duperadapter.samples
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
-import ru.justd.duperadapter.lib.ArrayListDuperAdapter
+import ru.justd.duperadapter.R
+import ru.justd.duperadapter.lib.SingleTypeAdapter
 
-class SimplaAdapterShowcase : AppCompatActivity() {
+class SimpleAdapterShowcase : AppCompatActivity() {
 
-    val duperAdapter = ArrayListDuperAdapter()
+    val adapter = SingleTypeAdapter(Integer::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,12 +18,12 @@ class SimplaAdapterShowcase : AppCompatActivity() {
         //init layout
         val recycler = RecyclerView(this)
         recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = duperAdapter
+        recycler.adapter = adapter
         setContentView(recycler)
 
         //init adapter
-        duperAdapter
-                .addViewType<Integer, CustomWidget>(Integer::class.java)
+        adapter
+                .builder<CustomWidget>()
                 .addViewCreator { parent -> CustomWidget(parent.context) }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
                 .addClickListener { view, item -> Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show() }
@@ -35,7 +36,7 @@ class SimplaAdapterShowcase : AppCompatActivity() {
 
         //add items
         for (i in 1..30) {
-            duperAdapter.add(i)
+            adapter.add(i)
         }
 
     }

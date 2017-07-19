@@ -91,22 +91,23 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     class FactoryNotCreatedException(message: String) : RuntimeException(message)
 
-    fun <T : Any, V : View> addViewType(itemType: Class<T>): FactoryBuilder<T, V> { //todo this method is only for java, should we annotate it somehow?
+    @JavaBackCompat
+    open fun <T : Any, V : View> addViewType(itemType: Class<T>): FactoryBuilder<T, V> {
         return FactoryBuilder(itemType, 0)
     }
 
-    fun <T : Any, V : View> addViewType(itemType: Class<T>, viewType: Int = 0): FactoryBuilder<T, V> {
-        return FactoryBuilder(itemType, viewType)
+    open fun <T : Any, V : View> addViewType(itemType: Class<T>, typeIndex: Int = 0): FactoryBuilder<T, V> {
+        return FactoryBuilder(itemType, typeIndex)
     }
 
-    inner class FactoryBuilder<T, V : View>(val clazz: Class<T>, val type: Int = 0) {
+    open inner class FactoryBuilder<T, V : View>(val clazz: Class<T>, val type: Int = 0) { //todo is there's a way to assure order (Chainer)?
 
         private lateinit var viewCreator: (ViewGroup) -> V
         private var viewBinder: ((DuperViewHolder<V>, T) -> Unit)? = null
         private val clickListeners = HashMap<Int, ItemClickListener<T, V>>()
         private val viewHolderClickListeners = HashMap<Int, ItemViewHolderClickListener<T, V>>()
 
-        fun addViewCreator(viewCreator: (ViewGroup) -> V): FactoryBuilder<T, V> { //todo is there's a way to assure order?
+        fun addViewCreator(viewCreator: (ViewGroup) -> V): FactoryBuilder<T, V> {
             this.viewCreator = viewCreator
             return this
         }
@@ -124,7 +125,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 //            })
 //        }
 
-        //todo this method will not be visible from java, annotate it somehow?
+        @OnlyKotlin
         fun addClickListener(@IdRes resId: Int = -1, itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> {
             return addClickListener(resId, object : ItemClickListener<T, V> {
                 override fun onItemClicked(view: V, item: T) {
@@ -185,6 +186,16 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
     class DuperViewHolder<out V : View>(val view: V) : RecyclerView.ViewHolder(view)
 
 }
+
+/**
+ * Means that function is only accessible obly from Kotlin and not visible from Java
+ */
+annotation class OnlyKotlin
+
+/**
+ * Means that function exist only for java compatibility and optimisation
+ */
+annotation class JavaBackCompat
 
 
 interface ItemClickListener<in T, in V : View> {

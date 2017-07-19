@@ -18,12 +18,12 @@
         </activity>
 
         <activity
-            android:name=".SimplaAdapterShowcase"
+            android:name=".samples.SimpleAdapterShowcase"
             android:label="ArrayListAdapter"
             android:parentActivityName=".MainActivity"/>
 
         <activity
-            android:name=".JavaSampleActivity"
+            android:name=".samples.JavaSampleActivity"
             android:label="Java sample"
             android:parentActivityName=".MainActivity"/>
 

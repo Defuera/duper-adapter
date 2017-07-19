@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
 import android.widget.Toast
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter
+import ru.justd.duperadapter.samples.JavaSampleActivity
+import ru.justd.duperadapter.samples.SimpleAdapterShowcase
 
 class MainActivity : RecyclerActivity() {
 
@@ -22,9 +24,9 @@ class MainActivity : RecyclerActivity() {
                     widget
                 }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
-                .addViewHolderClickListener { viewHoler, _ ->
-                    when (viewHoler.adapterPosition) {
-                        0 -> startActivity(Intent(this, SimplaAdapterShowcase::class.java))
+                .addViewHolderClickListener { viewHolder, _ ->
+                    when (viewHolder.adapterPosition) {
+                        0 -> startActivity(Intent(this, SimpleAdapterShowcase::class.java))
                         1 -> Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show()
                         2 -> startActivity(Intent(this, JavaSampleActivity::class.java))
                     }

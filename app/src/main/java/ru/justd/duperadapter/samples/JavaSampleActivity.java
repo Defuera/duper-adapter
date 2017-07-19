@@ -1,4 +1,4 @@
-package ru.justd.duperadapter;
+package ru.justd.duperadapter.samples;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,8 @@ import java.util.Arrays;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
+import ru.justd.duperadapter.R;
+import ru.justd.duperadapter.RecyclerActivity;
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter;
 import ru.justd.duperadapter.lib.DuperAdapter;
 
