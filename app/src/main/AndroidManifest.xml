@@ -21,7 +21,10 @@
             android:name=".samples.ArrayListAdapterShowcase"
             android:label="ArrayListAdapter"
             android:parentActivityName=".MainActivity"/>
-
+        <activity
+            android:name=".samples.MultipleTypesAdapterShowcase"
+            android:label="ArrayListAdapter"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".samples.JavaSampleActivity"
             android:label="Java sample"

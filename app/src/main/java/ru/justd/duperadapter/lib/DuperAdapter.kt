@@ -49,7 +49,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        val typeIndex = getItemViewTypeIndex(item)
+        val typeIndex = getItemViewTypeIndex(position, item)
         val itemViewType = duperCodesList.indexOf(
                 createDuperCode(
                         item.javaClass,
@@ -66,7 +66,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 
     private fun <T> createDuperCode(clazz: Class<T>, typeIndex: Int) = clazz.simpleName + "_" + typeIndex
 
-    open fun <T> getItemViewTypeIndex(item: T) = 0
+    open fun <T> getItemViewTypeIndex(position: Int, item: T) = 0
 
     @Suppress("UNCHECKED_CAST")
     private fun <T, V : View> getFactory(viewType: Int): Factory<T, V> {

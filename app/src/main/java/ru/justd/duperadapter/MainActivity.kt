@@ -3,14 +3,16 @@ package ru.justd.duperadapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
-import android.widget.Toast
 import ru.justd.duperadapter.lib.ArrayListDuperAdapter
 import ru.justd.duperadapter.samples.JavaSampleActivity
 import ru.justd.duperadapter.samples.ArrayListAdapterShowcase
+import ru.justd.duperadapter.samples.MultipleTypesAdapterShowcase
 
+//todo allow custom view holders
+//todo get rid of commit
 class MainActivity : RecyclerActivity() {
 
-    val adapter = ArrayListDuperAdapter()
+    private val adapter = ArrayListDuperAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +29,7 @@ class MainActivity : RecyclerActivity() {
                 .addViewHolderClickListener { viewHolder, _ ->
                     when (viewHolder.adapterPosition) {
                         0 -> startActivity(Intent(this, ArrayListAdapterShowcase::class.java))
-                        1 -> Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show()
+                        1 -> startActivity(Intent(this, MultipleTypesAdapterShowcase::class.java))
                         2 -> startActivity(Intent(this, JavaSampleActivity::class.java))
                     }
 
@@ -40,12 +42,8 @@ class MainActivity : RecyclerActivity() {
                         "Simple adapter showcase. Create adapter with custom view and set clickListeners to the root view and to it's child by specifying viewId"
                 ),
                 Sample(
-                        "JavaSample",
-                        "Use adapter from Java"
-                ),
-                Sample(
-                        "Custom viewHolder",
-                        "Showcase creating a custom view holder."
+                        "Adapter with multiple types",
+                        "Adapter with header and footer. It's also shows how you can register multiple different view types for the same class"
                 ),
                 Sample(
                         "JavaSample",
