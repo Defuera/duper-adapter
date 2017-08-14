@@ -6,11 +6,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import ru.justd.duperadapter.R
-import ru.justd.duperadapter.lib.SingleTypeAdapter
+import ru.justd.duperadapter.lib.ArrayListDuperAdapter
 
-class SimpleAdapterShowcase : AppCompatActivity() {
+class ArrayListAdapterShowcase : AppCompatActivity() {
 
-    val adapter = SingleTypeAdapter(Integer::class.java)
+    private val adapter = ArrayListDuperAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class SimpleAdapterShowcase : AppCompatActivity() {
 
         //init adapter
         adapter
-                .builder<CustomWidget>()
+                .addViewType<Integer, CustomWidget>(Integer::class.java)
                 .addViewCreator { parent -> CustomWidget(parent.context) }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
                 .addClickListener { view, item -> Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show() }

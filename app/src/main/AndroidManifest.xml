@@ -18,7 +18,7 @@
         </activity>
 
         <activity
-            android:name=".samples.SimpleAdapterShowcase"
+            android:name=".samples.ArrayListAdapterShowcase"
             android:label="ArrayListAdapter"
             android:parentActivityName=".MainActivity"/>
 

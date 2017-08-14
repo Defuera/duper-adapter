@@ -16,9 +16,9 @@ class CustomWidget(context: Context) : FrameLayout(context) {
 
     init {
         View.inflate(context, R.layout.widget_custom, this)
-        title = findViewById<TextView>(R.id.title)
-        subtitle = findViewById<TextView>(R.id.subtitle)
-        image = findViewById<ImageView>(R.id.image)
+        title = findViewById(R.id.title)
+        subtitle = findViewById(R.id.subtitle)
+        image = findViewById(R.id.image)
     }
 
     fun bind(item: Integer) {
