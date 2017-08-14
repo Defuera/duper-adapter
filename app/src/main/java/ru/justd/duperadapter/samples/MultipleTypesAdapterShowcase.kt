@@ -43,7 +43,7 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
                     textView.setPadding(padding, padding, padding, padding)
                     textView
                 }
-                .addViewBinder { viewHolder, _ -> viewHolder.view.text = "I'm a header, man" }
+                .addViewBinder { viewHolder, item -> viewHolder.view.text = item }
                 .commit()
 
         //add item type
@@ -69,12 +69,14 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
                 }
                 .commit()
 
+        //add header item
         adapter.add("Header title")
+
         //add items
-        for (i in 1..30) {
-            adapter.add(i)
-        }
-        adapter.add("Footer")
+        for (i in 1..30) { adapter.add(i) }
+
+        //add footer item
+        adapter.add("this is just a stub, actually we don't bind footer. I would recommend to use custom class instead of a string here.")
     }
 
 }
