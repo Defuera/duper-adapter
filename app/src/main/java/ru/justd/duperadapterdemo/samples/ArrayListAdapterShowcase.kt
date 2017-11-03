@@ -1,4 +1,4 @@
-package ru.justd.duperadapter.samples
+package ru.justd.duperadapterdemo.samples
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import ru.justd.duperadapter.R
-import ru.justd.duperadapter.lib.ArrayListDuperAdapter
+import ru.justd.duperadapter.ArrayListDuperAdapter
 
 class ArrayListAdapterShowcase : AppCompatActivity() {
 

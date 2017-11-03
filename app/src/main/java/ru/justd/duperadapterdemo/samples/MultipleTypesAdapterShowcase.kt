@@ -1,13 +1,12 @@
-package ru.justd.duperadapter.samples
+package ru.justd.duperadapterdemo.samples
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
-import android.widget.Toast
-import ru.justd.duperadapter.R
-import ru.justd.duperadapter.lib.ArrayListDuperAdapter
+import ru.justd.duperadapter.ArrayListDuperAdapter
+import ru.justd.duperadapterdemo.R
 
 class MultipleTypesAdapterShowcase : AppCompatActivity() {
 
@@ -51,11 +50,6 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
                 .addViewType<Integer, CustomWidget>(Integer::class.java)
                 .addViewCreator { parent -> CustomWidget(parent.context) }
                 .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
-                .addClickListener { view, item -> Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show() }
-                .addClickListener(R.id.image) {
-                    view, item ->
-                    Toast.makeText(view.context, "image view of item $item clicked", Toast.LENGTH_SHORT).show()
-                }
                 .commit()
 
         //add footer type

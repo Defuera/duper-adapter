@@ -1,4 +1,4 @@
-package ru.justd.duperadapter
+package ru.justd.duperadapterdemo
 
 import android.content.Context
 import android.support.v7.widget.CardView

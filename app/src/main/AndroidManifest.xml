@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ru.justd.duperadapter">
+          package="ru.justd.duperadapterdemo">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name="ru.justd.duperadapterdemo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -18,17 +18,17 @@
         </activity>
 
         <activity
-            android:name=".samples.ArrayListAdapterShowcase"
+            android:name="ru.justd.duperadapterdemo.samples.ArrayListAdapterShowcase"
             android:label="ArrayListAdapter"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="ru.justd.duperadapterdemo.MainActivity"/>
         <activity
-            android:name=".samples.MultipleTypesAdapterShowcase"
+            android:name="ru.justd.duperadapterdemo.samples.MultipleTypesAdapterShowcase"
             android:label="ArrayListAdapter"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="ru.justd.duperadapterdemo.MainActivity"/>
         <activity
-            android:name=".samples.JavaSampleActivity"
+            android:name="ru.justd.duperadapterdemo.samples.JavaSampleActivity"
             android:label="Java sample"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="ru.justd.duperadapterdemo.MainActivity"/>
 
     </application>
 

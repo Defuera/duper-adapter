@@ -1,4 +1,4 @@
-package ru.justd.duperadapter
+package ru.justd.duperadapterdemo
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -18,7 +18,7 @@ abstract class RecyclerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_list)
 
-        recycler = findViewById<RecyclerView>(R.id.recycler)
+        recycler = findViewById(R.id.recycler)
         recycler.layoutManager = LinearLayoutManager(this)
 
         val itemDecoration = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)

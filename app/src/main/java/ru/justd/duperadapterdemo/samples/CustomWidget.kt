@@ -1,4 +1,4 @@
-package ru.justd.duperadapter.samples
+package ru.justd.duperadapterdemo.samples
 
 import android.content.Context
 import android.util.Log
@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import ru.justd.duperadapter.R
+import ru.justd.duperadapterdemo.R
 
 class CustomWidget(context: Context) : FrameLayout(context) {
 

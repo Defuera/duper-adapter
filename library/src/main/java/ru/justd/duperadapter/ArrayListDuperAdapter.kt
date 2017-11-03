@@ -1,4 +1,4 @@
-package ru.justd.duperadapter.lib
+package ru.justd.duperadapter
 
 open class ArrayListDuperAdapter : DuperAdapter() {
 

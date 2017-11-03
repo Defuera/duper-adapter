@@ -1,4 +1,4 @@
-package ru.justd.duperadapter.lib
+package ru.justd.duperadapter
 
 import android.support.annotation.IdRes
 import android.support.v7.widget.RecyclerView
@@ -188,12 +188,12 @@ abstract class DuperAdapter : RecyclerView.Adapter<DuperAdapter.DuperViewHolder<
 }
 
 /**
- * Means that function is only accessible obly from Kotlin and not visible from Java
+ * Means that function is only accessible from Kotlin and not visible from Java
  */
 annotation class OnlyKotlin
 
 /**
- * Means that function exist only for java compatibility and optimisation
+ * Means that function exist only for java compatibility and optimization
  */
 annotation class JavaBackCompat
 
@@ -203,7 +203,7 @@ interface ItemClickListener<in T, in V : View> {
     fun onItemClicked(view: V, item: T)
 }
 
-interface ItemViewHolderClickListener<in T, in V : View> {
+interface ItemViewHolderClickListener<in T, in V : View> { //todo do we need ViewHolder clickListener at all?
 
     fun <VH : DuperAdapter.DuperViewHolder<V>> onItemClicked(viewHolder: VH, item: T)
 }

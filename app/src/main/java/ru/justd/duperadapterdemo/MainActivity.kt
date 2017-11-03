@@ -1,15 +1,16 @@
-package ru.justd.duperadapter
+package ru.justd.duperadapterdemo
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
-import ru.justd.duperadapter.lib.ArrayListDuperAdapter
-import ru.justd.duperadapter.samples.JavaSampleActivity
-import ru.justd.duperadapter.samples.ArrayListAdapterShowcase
-import ru.justd.duperadapter.samples.MultipleTypesAdapterShowcase
+import ru.justd.duperadapter.ArrayListDuperAdapter
+import ru.justd.duperadapterdemo.samples.ArrayListAdapterShowcase
+import ru.justd.duperadapterdemo.samples.JavaSampleActivity
+import ru.justd.duperadapterdemo.samples.MultipleTypesAdapterShowcase
 
 //todo allow custom view holders
-//todo get rid of commit
+//todo get rid of commit method
+//todo support custom view holders
 class MainActivity : RecyclerActivity() {
 
     private val adapter = ArrayListDuperAdapter()
