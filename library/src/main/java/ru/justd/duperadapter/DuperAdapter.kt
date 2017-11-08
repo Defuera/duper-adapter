@@ -158,7 +158,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
      * @return Int representation of itemViewType, which is directly used by RecyclerView.Adapter
      */
     private fun <T> createItemViewType(clazz: Class<T>, typeIndex: Int): Int {
-        var duperCode = createDuperCode(clazz, typeIndex)
+        val duperCode = createDuperCode(clazz, typeIndex)
 
         if (duperCodesList.contains(duperCode)) {
             throw IllegalArgumentException("Factory for type ${clazz.simpleName} with index $typeIndex already exists")
