@@ -12,7 +12,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import ru.justd.duperadapter.ArrayListDuperAdapter;
-import ru.justd.duperadapter.DuperAdapter;
 import ru.justd.duperadapterdemo.R;
 import ru.justd.duperadapterdemo.RecyclerActivity;
 
@@ -33,10 +32,10 @@ public class JavaSampleActivity extends RecyclerActivity {
                         return new CustomWidget(viewGroup.getContext());
                     }
                 })
-                .addViewBinder(new Function2<DuperAdapter.DuperViewHolder<? extends CustomWidget>, Integer, Unit>() {
+                .addViewBinder(new Function2<CustomWidget, Integer, Unit>() {
                     @Override
-                    public Unit invoke(DuperAdapter.DuperViewHolder<? extends CustomWidget> viewHolder, Integer item) {//todo returning Unit is bullshit, it should be void
-                        viewHolder.getView().bind(item);
+                    public Unit invoke(CustomWidget customWidget, Integer item) {
+                        customWidget.bind(item);
                         return null;
                     }
                 })

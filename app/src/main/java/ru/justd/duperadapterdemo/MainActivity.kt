@@ -2,7 +2,9 @@ package ru.justd.duperadapterdemo
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup.LayoutParams
+import android.widget.TextView
 import ru.justd.duperadapter.ArrayListDuperAdapter
 import ru.justd.duperadapterdemo.samples.ArrayListAdapterShowcase
 import ru.justd.duperadapterdemo.samples.JavaSampleActivity
@@ -20,13 +22,24 @@ class MainActivity : RecyclerActivity() {
 
         recycler.adapter = adapter
 
+
+        adapter.addViewType<String, TextView>(String::class.java)
+                .addViewHolderCreator { viewGroup ->
+                    val textView = TextView(viewGroup.context)
+                    textView.text = "Samples:"
+                    val p = viewGroup.context.resources.getDimensionPixelOffset(R.dimen.padding_16)
+                    textView.setPadding(p, p, p, p)
+                    object : RecyclerView.ViewHolder(textView) {}
+                }
+                .commit()
+
         adapter.addViewType<Sample, SampleWidget>(Sample::class.java)
                 .addViewCreator { parent ->
                     val widget = SampleWidget(parent.context)
                     widget.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
                     widget
                 }
-                .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
+                .addViewBinder { view, item -> view.bind(item) }
                 .addViewHolderClickListener { viewHolder, _ ->
                     when (viewHolder.adapterPosition) {
                         0 -> startActivity(Intent(this, ArrayListAdapterShowcase::class.java))
@@ -37,6 +50,7 @@ class MainActivity : RecyclerActivity() {
                 }
                 .commit()
 
+        adapter.add( "Samples:")
         adapter.addAll(listOf(
                 Sample(
                         "ArrayListAdapter",

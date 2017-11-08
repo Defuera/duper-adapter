@@ -42,14 +42,14 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
                     textView.setPadding(padding, padding, padding, padding)
                     textView
                 }
-                .addViewBinder { viewHolder, item -> viewHolder.view.text = item }
+                .addViewBinder { widget, item -> widget.text = item }
                 .commit()
 
         //add item type
         adapter
                 .addViewType<Integer, CustomWidget>(Integer::class.java)
                 .addViewCreator { parent -> CustomWidget(parent.context) }
-                .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
+                .addViewBinder { widget, item -> widget.bind(item) }
                 .commit()
 
         //add footer type

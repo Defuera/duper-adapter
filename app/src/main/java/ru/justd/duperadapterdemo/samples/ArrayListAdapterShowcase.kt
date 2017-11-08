@@ -25,7 +25,7 @@ class ArrayListAdapterShowcase : AppCompatActivity() {
         adapter
                 .addViewType<Integer, CustomWidget>(Integer::class.java)
                 .addViewCreator { parent -> CustomWidget(parent.context) }
-                .addViewBinder { viewHolder, item -> viewHolder.view.bind(item) }
+                .addViewBinder { widget, item -> widget.bind(item) }
                 .addClickListener { view, item -> Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show() }
                 .addClickListener(R.id.image) {
                     view, item ->
