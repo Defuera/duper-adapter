@@ -22,9 +22,11 @@ abstract class RecyclerActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
 
         val itemDecoration = DividerItemDecoration(recycler.context, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.item_decoration_padding))
+        val drawable = ContextCompat.getDrawable(this, R.drawable.item_decoration_padding)
+        if (drawable != null) {
+            itemDecoration.setDrawable(drawable)
+        }
         recycler.addItemDecoration(itemDecoration)
-
 
     }
 
