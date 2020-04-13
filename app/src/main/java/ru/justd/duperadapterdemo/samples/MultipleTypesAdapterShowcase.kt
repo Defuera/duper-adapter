@@ -38,7 +38,7 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
 
         //add header type
         adapter
-                .addViewType<String, TextView>(String::class.java, HEADER_VIEW_TYPE_INDEX)
+                .addViewType<String, TextView>(HEADER_VIEW_TYPE_INDEX)
                 .addViewCreator { parent -> val textView = TextView(parent.context)
                     textView.setPadding(padding, padding, padding, padding)
                     textView
@@ -48,7 +48,7 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
 
         //add item type
         adapter
-                .addViewType<Integer, CustomWidget>(Integer::class.java)
+                .addViewType<Integer, CustomWidget>()
                 .addViewCreator { parent -> CustomWidget(parent.context) }
                 .addViewBinder { widget, item -> widget.bind(item) }
                 .commit()
@@ -56,7 +56,7 @@ class MultipleTypesAdapterShowcase : AppCompatActivity() {
         //add footer type
         //Notice: footer do not have binder
         adapter
-                .addViewType<String, TextView>(String::class.java, FOOTER_VIEW_TYPE_INDEX)
+                .addViewType<String, TextView>(FOOTER_VIEW_TYPE_INDEX)
                 .addViewCreator { parent -> val textView = TextView(parent.context)
                     textView.text = "I'm a footer"
                     textView.setPadding(padding, padding, padding, padding)

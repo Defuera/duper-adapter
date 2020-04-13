@@ -12,7 +12,7 @@ import ru.justd.duperadapterdemo.samples.widgets.CustomWidget
 class ArrayListAdapterShowcase : AppCompatActivity() {
 
     private val adapter = ArrayListDuperAdapter().apply {
-        addViewType<Integer, CustomWidget>(Integer::class.java)
+        addViewType<Integer, CustomWidget>()
             .addViewCreator { parent -> CustomWidget(parent.context) }
             .addViewBinder { widget, item -> widget.bind(item) }
             .addClickListener { view, item -> Toast.makeText(view.context, "view clicked with item $item", Toast.LENGTH_SHORT).show() }

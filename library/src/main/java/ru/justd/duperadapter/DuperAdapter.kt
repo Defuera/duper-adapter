@@ -98,8 +98,8 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     class FactoryNotCreatedException(message: String) : RuntimeException(message)
 
-    open fun <T : Any, V : View> addViewType(itemType: Class<T>, typeIndex: Int = 0): FactoryBuilder<T, V> {
-        return FactoryBuilder(itemType, typeIndex)
+    inline fun <reified T : Any, V : View> addViewType(typeIndex: Int = 0): FactoryBuilder<T, V> {
+        return FactoryBuilder(T::class.java, typeIndex)
     }
 
     open inner class FactoryBuilder<T, V : View>(val clazz: Class<T>, val type: Int = 0) {

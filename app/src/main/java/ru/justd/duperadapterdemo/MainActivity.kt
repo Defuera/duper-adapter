@@ -22,7 +22,7 @@ class MainActivity : RecyclerActivity() {
         recycler.adapter = adapter
 
 
-        adapter.addViewType<String, TextView>(String::class.java)
+        adapter.addViewType<String, TextView>()
                 .addViewHolderCreator { viewGroup ->
                     val textView = TextView(viewGroup.context)
                     textView.text = "Samples:"
@@ -32,7 +32,7 @@ class MainActivity : RecyclerActivity() {
                 }
                 .commit()
 
-        adapter.addViewType<Sample, SampleWidget>(Sample::class.java)
+        adapter.addViewType<Sample, SampleWidget>()
                 .addViewCreator { parent ->
                     val widget = SampleWidget(parent.context)
                     widget.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
