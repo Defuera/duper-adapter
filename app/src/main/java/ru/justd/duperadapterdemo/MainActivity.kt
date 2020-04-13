@@ -7,7 +7,6 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.TextView
 import ru.justd.duperadapter.ArrayListDuperAdapter
 import ru.justd.duperadapterdemo.samples.ArrayListAdapterShowcase
-import ru.justd.duperadapterdemo.samples.JavaSampleActivity
 import ru.justd.duperadapterdemo.samples.MultipleTypesAdapterShowcase
 
 //todo allow custom view holders
@@ -44,7 +43,6 @@ class MainActivity : RecyclerActivity() {
                     when (viewHolder.adapterPosition) {
                         0 -> startActivity(Intent(this, ArrayListAdapterShowcase::class.java))
                         1 -> startActivity(Intent(this, MultipleTypesAdapterShowcase::class.java))
-                        2 -> startActivity(Intent(this, JavaSampleActivity::class.java))
                     }
 
                 }
@@ -59,10 +57,6 @@ class MainActivity : RecyclerActivity() {
                 Sample(
                         "Adapter with multiple types",
                         "Adapter with header and footer. It's also shows how you can register multiple different view types for the same class"
-                ),
-                Sample(
-                        "JavaSample",
-                        "Use adapter from Java"
                 )
         ))
 
