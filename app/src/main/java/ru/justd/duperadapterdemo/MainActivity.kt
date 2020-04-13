@@ -41,8 +41,8 @@ class MainActivity : RecyclerActivity() {
                 .addViewBinder { view, item -> view.bind(item) }
                 .addViewHolderClickListener { viewHolder, _ ->
                     when (viewHolder.adapterPosition) {
-                        0 -> startActivity(Intent(this, ArrayListAdapterShowcase::class.java))
-                        1 -> startActivity(Intent(this, MultipleTypesAdapterShowcase::class.java))
+                        1 -> startActivity(Intent(this, ArrayListAdapterShowcase::class.java))
+                        2 -> startActivity(Intent(this, MultipleTypesAdapterShowcase::class.java))
                     }
 
                 }

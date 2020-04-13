@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import ru.justd.duperadapter.ArrayListDuperAdapter
 import ru.justd.duperadapterdemo.R
+import ru.justd.duperadapterdemo.samples.widgets.CustomWidget
 
 class MultipleTypesAdapterShowcase : AppCompatActivity() {
 

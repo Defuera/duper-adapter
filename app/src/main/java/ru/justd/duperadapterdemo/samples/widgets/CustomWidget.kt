@@ -1,4 +1,4 @@
-package ru.justd.duperadapterdemo.samples
+package ru.justd.duperadapterdemo.samples.widgets
 
 import android.content.Context
 import android.util.Log
