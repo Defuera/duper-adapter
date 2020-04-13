@@ -77,11 +77,6 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     class FactoryNotCreatedException(message: String) : RuntimeException(message)
 
-    @JavaBackCompat
-    open fun <T : Any, V : View> addViewType(itemType: Class<T>): FactoryBuilder<T, V> {
-        return FactoryBuilder(itemType, 0)
-    }
-
     open fun <T : Any, V : View> addViewType(itemType: Class<T>, typeIndex: Int = 0): FactoryBuilder<T, V> {
         return FactoryBuilder(itemType, typeIndex)
     }
@@ -111,7 +106,16 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
             return this
         }
 
-        @OnlyKotlin
+        fun addLongClickListener(
+                @IdRes resId: Int = -1,
+                itemClickListener: (view: V, item: T) -> Unit
+        ): FactoryBuilder<T, V> =
+            addClickListener(resId, object : ItemClickListener<T, V> {
+                override fun onItemClicked(view: V, item: T) {
+                    itemClickListener.invoke(view, item)
+                }
+            })
+
         fun addClickListener(
                 @IdRes resId: Int = -1,
                 itemClickListener: (view: V, item: T) -> Unit
@@ -123,13 +127,11 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
                 })
 
         fun addViewHolderClickListener(@IdRes resId: Int = -1, itemViewHolderClickListener: (viewHolder: ViewHolder, item: T) -> Unit): FactoryBuilder<T, V> {
-            viewHolderClickListeners.put(
-                    resId,
-                    object : ItemViewHolderClickListener<T, V> {
-                        override fun <VH : ViewHolder> onItemClicked(viewHolder: VH, item: T) {
-                            itemViewHolderClickListener.invoke(viewHolder, item)
-                        }
-                    })
+            viewHolderClickListeners[resId] = object : ItemViewHolderClickListener<T, V> {
+                override fun <VH : ViewHolder> onItemClicked(viewHolder: VH, item: T) {
+                    itemViewHolderClickListener.invoke(viewHolder, item)
+                }
+            }
             return this
 
         }
@@ -172,23 +174,12 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 }
 
-/**
- * Means that function is only accessible from Kotlin and not visible from Java
- */
-annotation class OnlyKotlin
-
-/**
- * Means that function exist only for java compatibility and optimization
- */
-annotation class JavaBackCompat
-
-
 interface ItemClickListener<in T, in V : View> {
 
     fun onItemClicked(view: V, item: T)
 }
 
-interface ItemViewHolderClickListener<in T, in V : View> { //todo do we need ViewHolder clickListener at all?
+interface ItemViewHolderClickListener<in T, in V : View> {
 
     fun <VH : ViewHolder> onItemClicked(viewHolder: VH, item: T)
 }
