@@ -21,7 +21,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
             val view = viewHolder.itemView
 
             val target = if (resId == CONTAINER_ID) view else view.findViewById<View>(resId)
-            target.setOnClickListener { _ -> clickListener.onItemClicked(view, getItem(viewHolder.adapterPosition)) }
+            target.setOnClickListener { _ -> clickListener(view, getItem(viewHolder.adapterPosition)) }
         }
 
         factory.viewHolderClickListeners.forEach { (resId, clickListener) ->
@@ -71,7 +71,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
     inner class Factory<T, V : View> constructor(
             val viewHolderCreator: (ViewGroup) -> ViewHolder,
             val viewBinder: ((V, T) -> Unit)?,
-            val clickListeners: HashMap<Int, ItemClickListener<T, V>>,
+            val clickListeners: HashMap<Int, (view: V, item: T) -> Unit>,
             val viewHolderClickListeners: HashMap<Int, ItemViewHolderClickListener<T, V>>
     )
 
@@ -85,7 +85,7 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
 
         private lateinit var viewHolderCreator: (ViewGroup) -> ViewHolder
         private var viewBinder: ((V, T) -> Unit)? = null
-        private val clickListeners = HashMap<Int, ItemClickListener<T, V>>()
+        private val clickListeners = HashMap<Int, (view: V, item: T) -> Unit>()
         private val viewHolderClickListeners = HashMap<Int, ItemViewHolderClickListener<T, V>>()
 
         /**
@@ -106,25 +106,12 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
             return this
         }
 
-        fun addLongClickListener(
-                @IdRes resId: Int = -1,
-                itemClickListener: (view: V, item: T) -> Unit
-        ): FactoryBuilder<T, V> =
-            addClickListener(resId, object : ItemClickListener<T, V> {
-                override fun onItemClicked(view: V, item: T) {
-                    itemClickListener.invoke(view, item)
-                }
-            })
-
         fun addClickListener(
                 @IdRes resId: Int = -1,
                 itemClickListener: (view: V, item: T) -> Unit
-        ): FactoryBuilder<T, V> =
-                addClickListener(resId, object : ItemClickListener<T, V> {
-                    override fun onItemClicked(view: V, item: T) {
-                        itemClickListener.invoke(view, item)
-                    }
-                })
+        ): FactoryBuilder<T, V> = apply {
+            clickListeners.put(resId, itemClickListener)
+        }
 
         fun addViewHolderClickListener(@IdRes resId: Int = -1, itemViewHolderClickListener: (viewHolder: ViewHolder, item: T) -> Unit): FactoryBuilder<T, V> {
             viewHolderClickListeners[resId] = object : ItemViewHolderClickListener<T, V> {
@@ -136,24 +123,13 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
 
         }
 
-        fun addClickListener(@IdRes resId: Int = -1, clickListener: ItemClickListener<T, V>): FactoryBuilder<T, V> {
-            clickListeners.put(resId, clickListener)
-            return this
+        fun commit() {
+            factories[createItemViewType(clazz, type)] = Factory(
+                viewHolderCreator,
+                viewBinder,
+                clickListeners,
+                viewHolderClickListeners)
         }
-
-
-        fun commit() { //todo get rid of commit, you know how to do that
-
-            factories.put(
-                    createItemViewType(clazz, type),
-                    Factory(
-                            viewHolderCreator,
-                            viewBinder,
-                            clickListeners,
-                            viewHolderClickListeners)
-            )
-        }
-
     }
 
     /**
@@ -172,11 +148,6 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
         return duperCodesList.lastIndex
     }
 
-}
-
-interface ItemClickListener<in T, in V : View> {
-
-    fun onItemClicked(view: V, item: T)
 }
 
 interface ItemViewHolderClickListener<in T, in V : View> {
