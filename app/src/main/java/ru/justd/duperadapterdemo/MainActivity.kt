@@ -9,9 +9,6 @@ import ru.justd.duperadapter.ArrayListDuperAdapter
 import ru.justd.duperadapterdemo.samples.ArrayListAdapterShowcase
 import ru.justd.duperadapterdemo.samples.MultipleTypesAdapterShowcase
 
-//todo allow custom view holders
-//todo get rid of commit method
-//todo support custom view holders
 class MainActivity : RecyclerActivity() {
 
     private val adapter = ArrayListDuperAdapter()
