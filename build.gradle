@@ -2,6 +2,9 @@
 
 buildscript {
     ext {
+        appVersionCode = 1
+        appVersionName = "1.0.0"
+
         kotlinVersion = '1.3.61'
         daggerVersion = "2.11"
         okHttpVersion = '3.9.0'
