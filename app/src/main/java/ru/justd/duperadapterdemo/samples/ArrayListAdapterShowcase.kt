@@ -19,6 +19,11 @@ class ArrayListAdapterShowcase : AppCompatActivity() {
             .addClickListener(R.id.image) { view, item ->
                 Toast.makeText(view.context, "image view of item $item clicked", Toast.LENGTH_SHORT).show()
             }
+
+            .addLongClickListener { view, item -> Toast.makeText(view.context, "view LONG  clicked with item $item", Toast.LENGTH_SHORT).show() }
+            .addLongClickListener(R.id.image) { view, item ->
+                Toast.makeText(view.context, "image view of item $item LONG  clicked", Toast.LENGTH_SHORT).show()
+            }
             .commit()
     }
 

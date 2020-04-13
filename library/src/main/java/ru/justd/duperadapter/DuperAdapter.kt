@@ -20,15 +20,35 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
         factory.clickListeners.forEach { (resId, clickListener) ->
             val view = viewHolder.itemView
 
-            val target = if (resId == CONTAINER_ID) view else view.findViewById<View>(resId)
-            target.setOnClickListener { _ -> clickListener(view, getItem(viewHolder.adapterPosition)) }
+            val target = if (resId == CONTAINER_ID) view else view.findViewById(resId)
+            target.setOnClickListener { clickListener(view, getItem(viewHolder.adapterPosition)) }
         }
 
         factory.viewHolderClickListeners.forEach { (resId, clickListener) ->
             val view = viewHolder.itemView
 
+            val target = if (resId == CONTAINER_ID) view else view.findViewById(resId)
+            target.setOnClickListener { clickListener.onItemClicked(viewHolder, getItem(viewHolder.adapterPosition)) }
+        }
+
+        factory.longClickListeners.forEach { (resId, clickListener) ->
+            val view = viewHolder.itemView
+
+            val target = if (resId == CONTAINER_ID) view else view.findViewById(resId)
+            target.setOnLongClickListener {
+                clickListener(view, getItem(viewHolder.adapterPosition))
+                return@setOnLongClickListener true
+            }
+        }
+
+        factory.viewHolderLongClickListeners.forEach { (resId, clickListener) ->
+            val view = viewHolder.itemView
+
             val target = if (resId == CONTAINER_ID) view else view.findViewById<View>(resId)
-            target.setOnClickListener { _ -> clickListener.onItemClicked(viewHolder, getItem(viewHolder.adapterPosition)) }
+            target.setOnLongClickListener {
+                clickListener.onItemClicked(viewHolder, getItem(viewHolder.adapterPosition))
+                return@setOnLongClickListener true
+            }
         }
 
         return viewHolder
@@ -39,15 +59,14 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
         factory.viewBinder?.invoke(viewHolder.itemView, getItem(position))
     }
 
-
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         val typeIndex = getItemViewTypeIndex(position, item)
         val itemViewType = duperCodesList.indexOf(
-                createDuperCode(
-                        item.javaClass,
-                        typeIndex
-                )
+            createDuperCode(
+                item.javaClass,
+                typeIndex
+            )
         )
 
         if (itemViewType == -1) {
@@ -72,7 +91,9 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
             val viewHolderCreator: (ViewGroup) -> ViewHolder,
             val viewBinder: ((V, T) -> Unit)?,
             val clickListeners: HashMap<Int, (view: V, item: T) -> Unit>,
-            val viewHolderClickListeners: HashMap<Int, ItemViewHolderClickListener<T, V>>
+            val viewHolderClickListeners: HashMap<Int, ItemViewHolderClickListener<T, V>>,
+            val longClickListeners: HashMap<Int, (view: V, item: T) -> Unit>,
+            val viewHolderLongClickListeners: HashMap<Int, ItemViewHolderClickListener<T, V>>
     )
 
     class FactoryNotCreatedException(message: String) : RuntimeException(message)
@@ -86,7 +107,9 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
         private lateinit var viewHolderCreator: (ViewGroup) -> ViewHolder
         private var viewBinder: ((V, T) -> Unit)? = null
         private val clickListeners = HashMap<Int, (view: V, item: T) -> Unit>()
+        private val longClickListeners = HashMap<Int, (view: V, item: T) -> Unit>()
         private val viewHolderClickListeners = HashMap<Int, ItemViewHolderClickListener<T, V>>()
+        private val viewHolderLongClickListeners = HashMap<Int, ItemViewHolderClickListener<T, V>>()
 
         /**
          * Wraps your view with default [ViewHolder]. Use [addViewHolderCreator] in case you need to provide custom ViewHolder
@@ -106,11 +129,9 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
             return this
         }
 
-        fun addClickListener(
-                @IdRes resId: Int = -1,
-                itemClickListener: (view: V, item: T) -> Unit
-        ): FactoryBuilder<T, V> = apply {
-            clickListeners.put(resId, itemClickListener)
+        //region click listener
+        fun addClickListener(@IdRes resId: Int = -1, itemClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> = apply {
+            clickListeners[resId] = itemClickListener
         }
 
         fun addViewHolderClickListener(@IdRes resId: Int = -1, itemViewHolderClickListener: (viewHolder: ViewHolder, item: T) -> Unit): FactoryBuilder<T, V> {
@@ -120,15 +141,33 @@ abstract class DuperAdapter : RecyclerView.Adapter<ViewHolder>() {
                 }
             }
             return this
-
         }
+        //end region
+
+        //region long click listener
+        fun addLongClickListener(@IdRes resId: Int = -1, longClickListener: (view: V, item: T) -> Unit): FactoryBuilder<T, V> = apply {
+            longClickListeners[resId] = longClickListener
+        }
+
+        fun addViewHolderLongClickListener(@IdRes resId: Int = -1, itemViewHolderClickListener: (viewHolder: ViewHolder, item: T) -> Unit): FactoryBuilder<T, V> {
+            viewHolderLongClickListeners[resId] = object : ItemViewHolderClickListener<T, V> {
+                override fun <VH : ViewHolder> onItemClicked(viewHolder: VH, item: T) {
+                    itemViewHolderClickListener.invoke(viewHolder, item)
+                }
+            }
+            return this
+        }
+        //end region
 
         fun commit() {
             factories[createItemViewType(clazz, type)] = Factory(
                 viewHolderCreator,
                 viewBinder,
                 clickListeners,
-                viewHolderClickListeners)
+                viewHolderClickListeners,
+                longClickListeners,
+                viewHolderLongClickListeners
+            )
         }
     }
 
